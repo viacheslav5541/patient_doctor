@@ -2,7 +2,7 @@
 const initialState = {
     isConnected:false,
     pulse:0,
-    steps:1488228,
+    steps:0,
     device:'',
     weight:100,
     connected_device:null

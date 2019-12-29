@@ -3,8 +3,8 @@ export default function(){
         id:1,
         login:'Slavyan',
         password:228,
-        name: "Саня",
-        lname: "Кековор",
+        name: "Александр",
+        lname: "Иванцов",
         height:80,
         deviceID:''
     }   
