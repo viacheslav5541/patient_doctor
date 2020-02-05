@@ -19,9 +19,15 @@ import {
     Dimensions,
     Button,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Easing,
+    RefreshControl,
+    Animated
   } from 'react-native';
+import { autorizating } from '../actions/authorization';
 
+const d_width = Dimensions.get('window').width;
+const d_height = Dimensions.get('window').height;
 
 
 const leftContent = <Text>Pull to activate</Text>;
@@ -45,9 +51,30 @@ export default class Notyfications extends Component{
 
     constructor(props){
         super(props);
+        this.opacityValue = new Animated.Value(0);
         this.state = {
+            is_refreshing: false,
             notyfication:notyfication
         }
+    }
+    
+    opacity() {
+        this.opacityValue.setValue(0);
+        Animated.timing(
+          this.opacityValue,
+          {
+            toValue: 1,
+            duration: 3500,
+            easing: Easing.linear
+          }
+        ).start();
+    }
+    refresh() {
+        this.opacity();
+        this.setState({is_refreshing: true});
+        setTimeout(() => {
+            this.setState({is_refreshing: false});
+        }, 3500);
     }
     
     delete_notify = id => {
@@ -59,23 +86,37 @@ export default class Notyfications extends Component{
     
     
     render(){
-        
-
+        const opacity = this.opacityValue.interpolate({
+            inputRange: [0, 0.5, 1],
+            outputRange: [1, 0, 1]
+        });
         return(
-            <View style = {{height:150,borderColor:'red',borderBottomWidth:2,borderTopWidth:2,borderStyle:'dashed'}}>
-                <Text style={{textAlign:"center",fontSize:20,backgroundColor:'orange',color:'white'}}>Notifications</Text>
-                <FlatList
-                    data={this.state.notyfication}
-                    renderItem = {(item) => (
-                    <Swipeable leftContent={leftContent} rightButtons={rightButtons} onLeftActionRelease = {()=>this.delete_notify(item.item.id)}>
+            <View style = {{flex:5,lexDirection:"column",borderRadius:10,backgroundColor:'#1E88E5',justifyContent:'center',margin:10}}>  
+                <View style = {{flex:1}}>
+                    <Text style ={{fontFamily:'Roboto',fontSize:24,color:'white',marginTop:"auto"}}>Ваши напоминания</Text>
+                </View>
+                <View style = {{backgroundColor:"#E1F5FE",flex:5,marginLeft:10,marginRight:10,marginBottom:10,borderRadius:10}}>
+                    <FlatList
+                        refreshControl = {
+                            <RefreshControl 
+                                colors={['#1e90ff']}
+                                refreshing={this.state.is_refreshing}
+                                onRefresh={this.refresh.bind(this)}
+                            />
+                        }
+                        data={this.state.notyfication}
+                        renderItem = {(item) => (
+                        <Swipeable leftContent={leftContent} rightButtons={rightButtons} onLeftActionRelease = {()=>this.delete_notify(item.item.id)}>
                 
-                        <View style={{backgroundColor:'white'}}>
-                            <Text style = {{color:'black',fontWeight:"bold"}}>{item.item.type}</Text>
-                            <Text style = {{color:'black'}}>{item.item.text}</Text>
-                        </View>
-                    </Swipeable>
-                    )}
-                />
+                            <Animated.View style={{opacity,backgroundColor:'#E1F5FE'}}>
+                                <Text style = {{color:'black',fontWeight:"bold"}}>{item.item.type}</Text>
+                                <Text style = {{color:'black'}}>{item.item.text}</Text>
+                            </Animated.View>
+                        </Swipeable>
+                        )}
+                    />
+                </View>
+                
             </View>
         )
 

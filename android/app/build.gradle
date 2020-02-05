@@ -1,5 +1,11 @@
 apply plugin: "com.android.application"
 
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Name of the font files you want to copy
+]
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
 import com.android.build.OutputFile
 
 /**
@@ -74,6 +80,25 @@ import com.android.build.OutputFile
  *   extraPackagerArgs: []
  * ]
  */
+
+
+ 
+android {
+signingConfigs {
+release {
+storeFile file(MYAPP_RELEASE_STORE_FILE)
+storePassword MYAPP_RELEASE_STORE_PASSWORD
+keyAlias MYAPP_RELEASE_KEY_ALIAS
+keyPassword MYAPP_RELEASE_KEY_PASSWORD
+}
+}
+buildTypes {
+release {
+signingConfig signingConfigs.release
+}
+}
+}
+
 
 project.ext.react = [
     entryFile: "index.js",
@@ -179,8 +204,8 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-maps')
-    implementation project(':react-native-ble-manager')
+    implementation project(':react-native-gesture-handler')
+    implementation project(':react-native-reanimated')
     implementation project(':react-native-ble-plx')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
