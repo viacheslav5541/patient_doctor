@@ -5,11 +5,13 @@ buildscript {
         buildToolsVersion = "28.0.3"
         minSdkVersion = 18
         compileSdkVersion = 28
-        targetSdkVersion = 28
+        targetSdkVersion = 23
     }
     repositories {
         google()
         jcenter()
+        maven { url "https://maven.google.com" }
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:3.4.2")
@@ -34,5 +36,6 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven { url "https://maven.google.com" }
     }
 }

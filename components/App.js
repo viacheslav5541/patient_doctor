@@ -5,6 +5,10 @@ import {createStackNavigator} from 'react-navigation-stack';
 import HomeScreen from './Autorization';
 import Devices from './Devices';
 import ProfileScreen from './ProfileScreen';
+import Calendar_ from './Calendar'
+import Statistic from './Statistic'
+import Pulse_chart from './Pulse_chart'
+import Steps_chart from './Steps_chart'
 import {
   AppRegistry,
   StyleSheet,
@@ -29,32 +33,32 @@ import Icon from 'react-native-vector-icons/AntDesign'
 
 
 
-const Statistic = () =>{
-  return <View></View>
-}
-const Calendar = () =>{
-  return <View></View>
-}
 
 const Chat = () =>{
   return <View></View>
 }
 
+const Statistic_Pages = createStackNavigator({
+  Statistic:{screen:Statistic},
+  Pulse_chart:{screen:Pulse_chart},
+  Steps_chart:{screen:Steps_chart}
+});
+
  
 const TitlePages = createStackNavigator({
-  // Authorization: {screen: HomeScreen},
   ProfileScreen: {screen: ProfileScreen},
   Devices: {screen:Devices}
 });
 
+
 const MainNavigator = createBottomTabNavigator({
   Profile:{screen:TitlePages,navigationOptions:{
     tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {50} name = 'user'></Icon>)}},
-  Statistic:{screen:Statistic,navigationOptions:{
+  Statistic:{screen:Statistic_Pages,navigationOptions:{
     tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {50} name = 'flag'></Icon>)
     }
   },
-  Calendar:{screen:Calendar,navigationOptions:{
+  Calendar:{screen:Calendar_,navigationOptions:{
     tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {50} name = 'calendar'></Icon>)}},
   Chat:{screen:Chat,navigationOptions:{
     tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {50} name = 'wechat'></Icon>)}},
@@ -64,13 +68,21 @@ const MainNavigator = createBottomTabNavigator({
     showLabel:false,
     activeTintColor:'white',
     
-    style:{backgroundColor:'blue',height:70,borderTopWidth:4,borderTopColor:'black',borderBottomWidth:4},
+    style:{backgroundColor:'#0D47A1',height:70,borderTopWidth:4,borderTopColor:'black',borderBottomWidth:4},
     
+  },
+  navigationOptions:{
+    header:null
   }
 }
-)
+);
 
-const App = createAppContainer(MainNavigator);
+const Authorization2 = createStackNavigator({
+  Authorization:{screen:HomeScreen},
+  MainNavigator
+})
+
+const App = createAppContainer(Authorization2);
 
 export default App;
 

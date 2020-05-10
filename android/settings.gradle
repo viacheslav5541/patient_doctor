@@ -1,6 +1,10 @@
 rootProject.name = 'slavyanin'
 include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
+include ':react-native-iconic'
+project(':react-native-iconic').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-iconic/android')
+include ':react-native-gesture-handler'
+project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
 include ':react-native-reanimated'
 project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-reanimated/android')
 include ':react-native-ble-plx'

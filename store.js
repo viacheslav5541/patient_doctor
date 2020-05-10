@@ -4,6 +4,6 @@ import {Provider} from 'react-redux';
 import logger from 'redux-logger'
 import thunk from 'redux-thunk'
 
-const store  = createStore(allReducers,applyMiddleware(thunk,logger));
+const store  = createStore(allReducers,applyMiddleware(thunk));
 
 export default store;
