@@ -1,43 +1,16 @@
-import { Buffer } from 'buffer';
+
 import React, { Component } from 'react';
-import Bluetooth from './Bluetooth';
-import Info from './Info';
-import Notifications from './Notifycations';
-import { BleManager } from "react-native-ble-plx";
-import {connecting} from '../actions/bluetooth_actions';
-import consts  from '../Const/services_characteristics';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
-} from "react-native-chart-kit";
-import {
-    AsyncStorage,
-    AppRegistry,
-    StyleSheet,
     Text,
     View,
-    TouchableHighlight,
-    NativeAppEventEmitter,
-    NativeEventEmitter,
-    NativeModules,
-    Platform,
-    PermissionsAndroid,
-    ScrollView,
-    AppState,
     FlatList,
     Dimensions,
-    Button,
-    Image,
-    TouchableOpacity,
     Animated,
-    BackHandler, Easing, RefreshControl
+    Easing,
+    RefreshControl
 } from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -82,15 +55,6 @@ class Steps_chart extends Component {
         this.props.load_steps_data()
     }
 
-
-
-    componentDidMount(): void {
-
-
-
-
-    }
-
     render(){
         const opacity = this.opacityValue.interpolate({
             inputRange: [0, 0.5, 1],
@@ -122,8 +86,6 @@ class Steps_chart extends Component {
                         {this.state.done?<View><Text style = {{fontSize:vw(4.5), color:'#BED7FF'}}>Шагов до цели:{needSteps-this.steps>0?needSteps:0}</Text>
                         </View>:null}
                     </View>
-
-
                 </View>
                 <Animated.View style = {{opacity,flex:3}}>
                     <FlatList
@@ -150,9 +112,6 @@ class Steps_chart extends Component {
                                 </View>
 
                             </View>)}
-
-
-
                     ></FlatList>
                 </Animated.View>
 

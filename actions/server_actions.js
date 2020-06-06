@@ -57,16 +57,16 @@ export function load_pulse_data(){
 export async function send_steps(steps,token,id){
     let sending_data = [];
     let storage_data = []
-    let kek = await AsyncStorage.getItem(`steps_data ${id}`);
-    let kek2 = await AsyncStorage.getItem(`steps_storage ${id}`);
-    if(kek2){
-        storage_data = JSON.parse(kek2)
+    let steps_data = await AsyncStorage.getItem(`steps_data ${id}`);
+    let steps_storage = await AsyncStorage.getItem(`steps_storage ${id}`);
+    if(steps_storage){
+        storage_data = JSON.parse(steps_storage)
     }
     storage_data.length > 250?storage_data.pop():null;
     storage_data.unshift({date:moment().format('YYYY-MM-DD HH:mm'),user_step:steps});
     await AsyncStorage.setItem(`steps_storage ${id}`,JSON.stringify(storage_data));
-    if(kek) {
-        sending_data = JSON.parse(kek);
+    if(steps_data) {
+        sending_data = JSON.parse(steps_data);
     }
     sending_data.push({date:moment().format('YYYY-MM-DD HH:mm'),user_step:steps});
     axios.post('http://82.179.9.51:8080/send_step',sending_data,{headers:{authorization:`Bearer ${token}`}}).then(res=>{
@@ -80,16 +80,16 @@ export async function send_steps(steps,token,id){
 export async function send_pulse(pulse,token,id){
     let sending_data = [];
     let storage_data = []
-    let kek = await AsyncStorage.getItem(`pulse_data ${id}`);
-    let kek2 = await AsyncStorage.getItem(`pulse_storage ${id}`);
-    if(kek2){
-        storage_data = JSON.parse(kek2)
+    let pulse_data = await AsyncStorage.getItem(`pulse_data ${id}`);
+    let pulse_storage = await AsyncStorage.getItem(`pulse_storage ${id}`);
+    if(pulse_storage){
+        storage_data = JSON.parse(pulse_storage)
     }
     storage_data.length > 250?storage_data.pop():null;
     storage_data.unshift({date:moment().format('YYYY-MM-DD HH:mm'),user_pulse:pulse});
     await AsyncStorage.setItem(`pulse_storage ${id}`,JSON.stringify(storage_data));
-    if(kek) {
-        sending_data = JSON.parse(kek);
+    if(pulse_data) {
+        sending_data = JSON.parse(pulse_data);
     }
     sending_data.push({date:moment().format('YYYY-MM-DD HH:mm'),user_pulse:pulse});
     axios.post('http://82.179.9.51:8080/send_pulse',sending_data,{headers:{authorization:`Bearer ${token}`}}).then(res=>{
@@ -121,12 +121,12 @@ export function auth(login,password,navigation = null){
 
 export function logout(navigation){
     return function(dispatch,getState){
-        var kek = getState().server_data.navigation
+        var server_data = getState().server_data.navigation
         dispatch(full_disconnect())
         dispatch({type:LOGOUT})
         AsyncStorage.setItem('log_pass','').then(res=>{
             dispatch(full_disconnect())
-            kek.dispatch(resetAction)
+            server_data.dispatch(resetAction)
 
 
         })

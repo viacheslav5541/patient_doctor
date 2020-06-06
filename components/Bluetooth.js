@@ -16,7 +16,7 @@ export default class Bluetooth{
     }
 
     devices(){
-        console.log(consts);
+
         this.manager.startDeviceScan(null,null,(error,device)=>{
             if(error){
                 return error.message;
@@ -24,7 +24,6 @@ export default class Bluetooth{
             if(device.name == "Mi Smart Band 4"){
                 device.connect().then((device)=>{
                     this.device = device;
-                    console.log(this.device);
                     this.check_connection(true);
                     this.manager.stopDeviceScan();
                     this.start_scan();
@@ -36,9 +35,8 @@ export default class Bluetooth{
     }
     start_scan(){
         this.check_pulse();
-        var lol = [21,1,1];
-        var encryptedCredentials = new Buffer(lol).toString("base64");
-        console.log(encryptedCredentials);
+        var values = [21,1,1];
+        var encryptedCredentials = new Buffer(values).toString("base64");
 
 
         this.device.discoverAllServicesAndCharacteristics()
@@ -50,18 +48,14 @@ export default class Bluetooth{
 
     }
     check_pulse(){
-        
-            
         this.device.discoverAllServicesAndCharacteristics()
-        .then((device) => {
-            console.log(device)
+            .then((device) => {
             this.manager.monitorCharacteristicForDevice(
             device.id,
             consts.HEAR_RATE_SERVICE_GUID,
             consts.HEART_RATE_MEASUREMENT_VALUE,
             (error, characteristic) => {
                 if (characteristic && characteristic.value) {
-                    console.log(characteristic)
                 
                 // is 1 then 2 bytes).
                     let heartRate = -1;
@@ -71,34 +65,13 @@ export default class Bluetooth{
                 // Heart Rate Value Format is in the 2nd byte
                         heartRate = decoded.readUInt8(1);
                         this.pulse = heartRate
-                        console.log(this.pulse);
                 } else {
-                // Heart Rate Value Format is in the 2nd and 3rd bytes
                     heartRate = (decoded.readInt8(1) << 8) + decoded.readInt8(2);
                     this.pulse = heartRate
-                    console.log(this.pulse);
-                
-                
                 }
             }
-
-
             })
 
         })
     }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-    
 }

@@ -31,6 +31,8 @@ import {
     Image,
     TouchableOpacity, Easing
 } from 'react-native';
+import axios from "axios";
+import moment from 'moment';
 
   const d_width = Dimensions.get('window').width;
   const d_height = Dimensions.get('window').height;
@@ -44,13 +46,21 @@ class Info extends Component{
         this.state = {
             window:false,
             loading:false,
-            dist:'0',
+            dist:'',
             sist:'',
+            err:'',
         }
        
     }
 
     send_pressure(){
+        this.setState({window:false})
+        axios.post('http://82.179.9.51:8080/send_pressure',[{date:moment().format('YYYY-MM-DD HH:mm'),systolic_pressure:this.state.sist,diastolic_pressure:this.state.dist}],{headers:{authorization:`Bearer ${this.props.server_data.access_token}`}}).then(res=>{
+            this.setState({dist:'',sist:''})
+        }).catch(()=>{
+           setTimeout(()=>this.setState({window:true,err:'Произошла ошибка!'}),500)
+
+        })
 
 
     }
@@ -64,42 +74,11 @@ class Info extends Component{
         });
         let Bluetooth_data = this.props.Bluetooth_data;
         return(
-            <View style = {{flex:5,backgroundColor:"#2979FF",borderRadius:10,margin:10}}>
-                <Dialog
-                    visible={this.state.window}
-                >
-                    <DialogContent style = {{backgroundColor:'#009dff'}}>
-                        <View style = {{width:vw(30),height:vh(30),flexDirection:'column',alignItems:'center',justifyContent:'space-between'}}>
-                            <View style = {{flex:1}}><Text style = {{marginTop:10,fontSize:vw(3),color:'white'}}>Внести давление?</Text></View>
-                            <View style = {{flex:4,marginTop:20}}>
-                                <View style = {{flexDirection:'column',alignItems:'center'}}>
-                                    <View style = {{height:vw(12),width:vw(12),backgroundColor:"white",borderWidth:2,borderRadius:100,borderColor:'rgba(0,0, 0, 0.174)'}}>
-                                        <TextInput onChangeText={text => {this.setState({sist:text});console.log(this.state.sist)}} placeholder = '0' keyboardType='numeric' style = {{fontSize:vw(3.4),textAlign: "center",marginTop:'auto',marginBottom:'auto'}} caretHidden = {true} maxLength = {3}/>
-                                    </View>
-                                    <Text style = {{color:'white'}}>Систолическое</Text>
-                                    <View style = {{height:vw(12),width:vw(12),backgroundColor:"white",borderWidth:2,borderRadius:100,borderColor:'rgba(0,0, 0, 0.174)'}}>
-                                        <TextInput placeholder = '0' onChangeText={text => {this.setState({dist:text})}} keyboardType='numeric' style = {{fontSize:vw(3.4),textAlign: "center",marginTop:'auto',marginBottom:'auto'}} caretHidden = {true} maxLength = {3}/>
-                                    </View>
-                                    <Text style = {{color:'white'}}>Дистолическое</Text>
-                                </View>
-                            </View>
-                            <View style = {{flex:0.5,alignSelf:'center',}}><Text></Text></View>
-                        </View>
-                        <View style = {{height:vh(5),marginTop:10,width:vw(30),flexDirection:"row",justifyContent:'space-around',borderTopWidth:2,alignContent:'center',borderColor:'grey'}}>
-                            <View style = {{flex:1}}><TouchableOpacity style = {{flex:1}}>
-                                <Icon size = {vw(5)} style = {{marginTop:'auto',marginRight:'auto',marginLeft:'auto',color:'white'}} name = 'close'/>
-                            </TouchableOpacity></View>
-                            <View style = {{borderWidth:1,marginTop:'auto',height:vw(5),borderColor:'grey'}}/>
-                            <View style = {{flex:1}}><TouchableOpacity style = {{flex:1}}>
-                                <Icon size = {vw(5)} style = {{marginTop:'auto',marginRight:'auto',marginLeft:'auto',color:'white'}} name = 'check'/>
-                            </TouchableOpacity></View>
-                        </View>
-                    </DialogContent>
-                </Dialog>
+            <View style = {{flex:5,backgroundColor:"white",borderRadius:10,margin:10}}>
                 <TouchableOpacity onPress = {()=>this.setState({window:!this.state.window})}>
                     <Icon style = {{alignSelf:'flex-end',marginRight:10,height:vh(2.5)}} size = {vw(6)} name = 'ellipsis1'></Icon>
                 </TouchableOpacity>
-                <View style = {{flex:1,margin:10,backgroundColor:"#E1F5FE",borderRadius:10,flexDirection:'column',justifyContent:'space-between'}}>
+                <View style = {{flex:1,margin:10,backgroundColor:"white",borderRadius:10,flexDirection:'column',justifyContent:'space-between'}}>
                     <View style = {{flex:1,flexDirection:'row',justifyContent:'space-between',alignItems:'baseline'}}>
                         <View style = {{flex:1,marginLeft:10}}>
                             <Icon2 size = {vw(12)} name = 'running'/>
@@ -154,13 +133,45 @@ class Info extends Component{
                     
 
                 </View>
+                <Dialog
+                    visible={this.state.window}
+                >
+                    {!this.state.loading?<DialogContent style = {{backgroundColor:'#009dff'}}>
+                        <View style = {{width:vw(30),height:vh(30),flexDirection:'column',alignItems:'center',justifyContent:'space-between'}}>
+                            <View style = {{flex:1}}><Text style = {{marginTop:10,fontSize:vw(3),color:'white'}}>Внести давление?</Text></View>
+                            {this.state.err?<View style = {{flex:0.5,alignSelf:'center',}}><Text>{this.state.err}</Text></View>:null}
+                            <View style = {{flex:4,marginTop:20}}>
+                                <View style = {{flexDirection:'column',alignItems:'center'}}>
+                                    <View style = {{height:vw(12),width:vw(12),backgroundColor:"white",borderWidth:2,borderRadius:100,borderColor:'rgba(0,0, 0, 0.174)'}}>
+                                        <TextInput placeholder = '0' onChangeText={text => {this.setState({sist:text});console.log(this.state.sist)}} value = {this.state.sist} keyboardType='numeric' style = {{fontSize:vw(3.4),textAlign: "center",marginTop:'auto',marginBottom:'auto'}} caretHidden = {true} maxLength = {3}/>
+                                    </View>
+                                    <Text style = {{color:'white'}}>Систолическое</Text>
+                                    <View style = {{height:vw(12),width:vw(12),backgroundColor:"white",borderWidth:2,borderRadius:100,borderColor:'rgba(0,0, 0, 0.174)'}}>
+                                        <TextInput placeholder = '0' value = {this.state.dist} onChangeText={text => {this.setState({dist:text})}} keyboardType='numeric' style = {{fontSize:vw(3.4),textAlign: "center",marginTop:'auto',marginBottom:'auto'}} caretHidden = {true} maxLength = {3}/>
+                                    </View>
+                                    <Text style = {{color:'white'}}>Дистолическое</Text>
+                                </View>
+                            </View>
 
+                        </View>
+                        <View style = {{height:vh(5),marginTop:10,width:vw(30),flexDirection:"row",justifyContent:'space-around',borderTopWidth:2,alignContent:'center',borderColor:'grey'}}>
+                            <View style = {{flex:1}}><TouchableOpacity onPress = {()=>{this.setState({window:false,err:''})}} style = {{flex:1}}>
+                                <Icon size = {vw(5)} style = {{marginTop:'auto',marginRight:'auto',marginLeft:'auto',color:'white'}} name = 'close'/>
+                            </TouchableOpacity></View>
+                            <View style = {{borderWidth:1,marginTop:'auto',height:vw(5),borderColor:'grey'}}/>
+                            <View style = {{flex:1}}><TouchableOpacity onPress ={()=>{this.send_pressure()}} style = {{flex:1}}>
+                                <Icon size = {vw(5)} style = {{marginTop:'auto',marginRight:'auto',marginLeft:'auto',color:'white'}} name = 'check'/>
+                            </TouchableOpacity></View>
+                        </View>
+                    </DialogContent>:<DialogContent style = {{backgroundColor:'#009dff'}}>
+                            <View style = {{width:vw(30),height:vh(30),flexDirection:'column',alignItems:'center',justifyContent:'space-between'}}>
+
+                            </View></DialogContent>}
+                </Dialog>
 
             </View>
         )
     }
-
-
   }
 
 

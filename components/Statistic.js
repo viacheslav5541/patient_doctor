@@ -1,11 +1,6 @@
-import { Buffer } from 'buffer';
+
 import React, { Component } from 'react';
-import Bluetooth from './Bluetooth';
-import Info from './Info';
 import {load_pulse_data,load_steps_data} from '../actions/server_actions'
-import Notifications from './Notifycations';
-import { BleManager } from "react-native-ble-plx";
-import consts  from '../Const/services_characteristics';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import {
@@ -64,10 +59,6 @@ const d_height = Dimensions.get('window').height;
   }
   componentDidMount(){
     this.props.navigation.addListener('willFocus', ()=>{
-      // AsyncStorage.getItem('pulse_storage').then(res=>{
-      //   console.log(res)
-      //   this.setState({data:JSON.parse(res)})
-      // })
       this.props.load_pulse_data();
       this.props.load_steps_data();
     });
@@ -111,7 +102,7 @@ const d_height = Dimensions.get('window').height;
 
             <View style = {{backgroundColor:'#A5C9FF',height:vw(20),width:vw(20),marginTop:'auto',marginBottom:'auto',marginRight:'auto',marginLeft:'auto',borderRadius:200}}>
               <TouchableOpacity onPress = {()=>{this.props.navigation.navigate('Pulse_chart')}}>
-              <Text style = {{textAlign:'center',marginBottom:'auto',marginTop:vh(1.5),fontSize:vw(8),fontFamily:"Roboto"}}>{this.props.Bluetooth_data.pulse}</Text>
+              <Text style = {{textAlign:'center',marginBottom:'auto',marginTop:vw(4),fontSize:vw(8),fontFamily:"Roboto"}}>{this.props.Bluetooth_data.pulse}</Text>
               </TouchableOpacity>
             </View>
           </View>

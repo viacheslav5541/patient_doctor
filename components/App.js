@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { BleManager } from "react-native-ble-plx"
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import HomeScreen from './Autorization';
+import Autorization from './Autorization';
 import Devices from './Devices';
 import ProfileScreen from './ProfileScreen';
 import Calendar_ from './Calendar'
 import Statistic from './Statistic'
 import Pulse_chart from './Pulse_chart'
 import Steps_chart from './Steps_chart'
+import Recommendations from './Recommendations'
 import {
   AppRegistry,
   StyleSheet,
@@ -28,15 +29,15 @@ import {
 } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import Icon from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon2 from 'react-native-vector-icons/Fontisto'
+import {blue} from "color-name";
 
 
 
 
 
-const Chat = () =>{
-  return <View></View>
-}
+
 
 const Statistic_Pages = createStackNavigator({
   Statistic:{screen:Statistic},
@@ -44,7 +45,7 @@ const Statistic_Pages = createStackNavigator({
   Steps_chart:{screen:Steps_chart}
 });
 
- 
+
 const TitlePages = createStackNavigator({
   ProfileScreen: {screen: ProfileScreen},
   Devices: {screen:Devices}
@@ -53,23 +54,23 @@ const TitlePages = createStackNavigator({
 
 const MainNavigator = createBottomTabNavigator({
   Profile:{screen:TitlePages,navigationOptions:{
-    tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {50} name = 'user'></Icon>)}},
+    tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {30} name = 'account'></Icon>)}},
   Statistic:{screen:Statistic_Pages,navigationOptions:{
-    tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {50} name = 'flag'></Icon>)
+    tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {30} name = 'heart-pulse'></Icon>)
     }
   },
   Calendar:{screen:Calendar_,navigationOptions:{
-    tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {50} name = 'calendar'></Icon>)}},
-  Chat:{screen:Chat,navigationOptions:{
-    tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {50} name = 'wechat'></Icon>)}},
+    tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {30} name = 'calendar'></Icon>)}},
+      Recommendations:{screen:Recommendations,navigationOptions:{
+    tabBarIcon:({tintColor})=>(<Icon style = {{color:tintColor}} size = {30} name = 'format-list-bulleted'></Icon>)}},
 },
 {
   tabBarOptions:{
     showLabel:false,
-    activeTintColor:'white',
-    
-    style:{backgroundColor:'#0D47A1',height:70,borderTopWidth:4,borderTopColor:'black',borderBottomWidth:4},
-    
+    activeTintColor:'blue',
+
+    style:{backgroundColor:'white',height:60,borderTopLeftRadius:25,borderTopRightRadius:25,borderTopColor: "transparent",color:"blue"},
+
   },
   navigationOptions:{
     header:null
@@ -77,12 +78,12 @@ const MainNavigator = createBottomTabNavigator({
 }
 );
 
-const Authorization2 = createStackNavigator({
-  Authorization:{screen:HomeScreen},
+const App_stack = createStackNavigator({
+  Authorization:{screen:Autorization},
   MainNavigator
 })
 
-const App = createAppContainer(Authorization2);
+const App = createAppContainer(App_stack);
 
 export default App;
 

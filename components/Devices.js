@@ -4,24 +4,12 @@ import {connect} from 'react-redux';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import {full_disconnect, change_device, connect_to_device,update_status} from '../actions/bluetooth_actions';
 import {
-    AppRegistry,
-    StyleSheet,
     Text,
     View,
-    TouchableHighlight,
-    NativeAppEventEmitter,
-    NativeEventEmitter,
-    NativeModules,
-    Platform,
-    PermissionsAndroid,
-    ScrollView,
-    AppState,
     FlatList,
-    Dimensions,
-    Button,
-    BackHandler, TouchableOpacity, Image
+    TouchableOpacity,
+    Image
 } from 'react-native';
-// import { TouchableOpacity } from 'react-native-gesture-handler';
 import { StackActions, NavigationActions } from 'react-navigation';
 import {AsyncStorage} from 'react-native'
 
@@ -59,7 +47,6 @@ class Devices extends Component {
     }
 
      change_device(device){
-        console.log(device);
         AsyncStorage.setItem('device',device);
         this.props.change_device(device);
 
@@ -81,7 +68,6 @@ class Devices extends Component {
     scan_devices(){
         this.props.Bluetooth_data.manager.startDeviceScan(null,null,(error,device)=>{
             if(error){
-                console.log(error)
             }
             if(device){
                 var check = true;
@@ -100,53 +86,10 @@ class Devices extends Component {
 
         })
     }
-    // scan_devices(){
-    //     return function(dispatch,getState){
-    //         getState().Bluetooth_data.manager.startDeviceScan(null,null,(error,device)=>{
-    //             if(error){
-    //                 dispatch(update_status(error))
-    //             }
-    //             if(device){
-    //                 var check = true;
-    //                 let devices_list = getState().Bluetooth_data.devices_list
-    //                 for(var i = 0;i<devices_list.length;i+=1)
-    //                 {
-    //                     if(device.id == devices_list[i].id)
-    //                         check = false
-    //                 }
-    //                 if(check == true){
-    //                     devices_list.push({id:device.id,name:device.name});
-    //                     dispatch({
-    //                         type:DEVICES_LIST_UPDATED,
-    //                         payload:devices_list
-    //                     })
-    //
-    //                 }
-    //
-    //                 // dispatch(add_device(device,getState().Bluetooth_data.devices_list))
-    //             }
-    //         })
-    //     }
-    // }
 
     componentDidMount(){
-        this.props.full_disconnect()
-        this.scan_controller()
-        // if(this.props.Bluetooth_data.device_searching){
-        //     this.props.stop_scan(this.props.Bluetooth_data.manager);
-        // }
-        // setTimeout(() => this.props.Bluetooth_data.manager.startDeviceScan(null,null,(error,device)=>{
-        //         //     if(error){
-        //         //         this.props.error_handler(error)
-        //         //     }
-        //         //     if(device){
-        //         //         // console.log(device)
-        //         //         this.add_device(device)
-        //         //     }
-        //         //
-        //         // }),2000)
-        //
-        // this.props.bluetooth_controller('display');
+        this.props.full_disconnect();
+        this.scan_controller();
     }
 
     render(){
@@ -155,9 +98,11 @@ class Devices extends Component {
         } else  this.need_device = '';
         return(
             <View style = {{flex:1}}>
-                <View style = {{height:vh(8),width:vw(100),backgroundColor:'#0D47A1',display:'flex',flexDirection:'row'}}>
-                    <Text style = {{color:'white',fontSize:vw(5)}}>{this.props.Bluetooth_data.status}</Text>
-                </View>
+                <Image source={require('../icons/volnaa.png')} style = {{position:'absolute',top:0,right:0,width:vw(100),height:vw(100)}}></Image>
+                <Image source={require('../icons/volnaaa.png')} style = {{position:'absolute',top:0,right:0,width:vw(100),height:vw(100)}}></Image>
+                <Image source={require('../icons/volnaa.png')} style = {{position:'absolute',bottom:0,left:0,width:vw(60),height:vw(100),transform: [{ rotate: '180deg'}]}}></Image>
+                <Image source={require('../icons/volnaaa.png')} style = {{position:'absolute',bottom:0,left:0,width:vw(60),height:vw(100),transform: [{ rotate: '180deg'}]}}></Image>
+
 
                 {
                     <FlatList

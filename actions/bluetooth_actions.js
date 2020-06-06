@@ -27,11 +27,11 @@ export function reconnect(){
     return function(dispatch,getState){
         console.log('djhjksdhjksdhdjks')
         let ble_data = getState().Bluetooth_data;
-        if(ble_data.connected_device||ble_data.device_searching){
+        if(ble_data.connected_device||ble_data.device_searching) {
             console.log('ok')
             ble_data.manager.cancelDeviceConnection(ble_data.device);
         }
-        if(ble_data.connected_device == false && ble_data.device_searching == false){
+        else{
             dispatch(ble_state_listener_on())
         }
 
