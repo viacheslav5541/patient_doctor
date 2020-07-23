@@ -63,17 +63,20 @@ export async function send_steps(steps,token,id){
         storage_data = JSON.parse(steps_storage)
     }
     storage_data.length > 250?storage_data.pop():null;
-    storage_data.unshift({date:moment().format('YYYY-MM-DD HH:mm'),user_step:steps});
-    await AsyncStorage.setItem(`steps_storage ${id}`,JSON.stringify(storage_data));
-    if(steps_data) {
-        sending_data = JSON.parse(steps_data);
+    if(moment(storage_data[0].date).format('HH') != moment().format('HH')) {
+        storage_data.unshift({date: moment().format('YYYY-MM-DD HH:mm'), user_step: steps});
+        console.log(storage_data[0])
+        await AsyncStorage.setItem(`steps_storage ${id}`, JSON.stringify(storage_data));
+        if (steps_data) {
+            sending_data = JSON.parse(steps_data);
+        }
+        sending_data.push({date: moment().format('YYYY-MM-DD HH:mm'), user_step: steps});
+        axios.post('http://82.179.9.51:8080/send_step', sending_data, {headers: {authorization: `Bearer ${token}`}}).then(res => {
+            AsyncStorage.setItem(`steps_data ${id}`, '')
+        }).catch(err => {
+            AsyncStorage.setItem(`steps_data ${id}`, JSON.stringify(sending_data))
+        })
     }
-    sending_data.push({date:moment().format('YYYY-MM-DD HH:mm'),user_step:steps});
-    axios.post('http://82.179.9.51:8080/send_step',sending_data,{headers:{authorization:`Bearer ${token}`}}).then(res=>{
-        AsyncStorage.setItem(`steps_data ${id}`,'')
-    }).catch(err=>{
-        AsyncStorage.setItem(`steps_data ${id}`,JSON.stringify(sending_data))
-    })
 }
 
 
@@ -86,17 +89,21 @@ export async function send_pulse(pulse,token,id){
         storage_data = JSON.parse(pulse_storage)
     }
     storage_data.length > 250?storage_data.pop():null;
-    storage_data.unshift({date:moment().format('YYYY-MM-DD HH:mm'),user_pulse:pulse});
-    await AsyncStorage.setItem(`pulse_storage ${id}`,JSON.stringify(storage_data));
-    if(pulse_data) {
-        sending_data = JSON.parse(pulse_data);
+    if(moment(storage_data[0].date).format('mm') != moment().format('mm')) {
+        storage_data.unshift({date: moment().format('YYYY-MM-DD HH:mm'), user_pulse: pulse});
+
+        console.log(moment(storage_data[0].date).format('mm'))
+        await AsyncStorage.setItem(`pulse_storage ${id}`, JSON.stringify(storage_data));
+        if (pulse_data) {
+            sending_data = JSON.parse(pulse_data);
+        }
+        sending_data.push({date: moment().format('YYYY-MM-DD HH:mm'), user_pulse: pulse});
+        axios.post('http://82.179.9.51:8080/send_pulse', sending_data, {headers: {authorization: `Bearer ${token}`}}).then(res => {
+            AsyncStorage.setItem(`pulse_data ${id}`, '')
+        }).catch(err => {
+            AsyncStorage.setItem(`pulse_data ${id}`, JSON.stringify(sending_data))
+        })
     }
-    sending_data.push({date:moment().format('YYYY-MM-DD HH:mm'),user_pulse:pulse});
-    axios.post('http://82.179.9.51:8080/send_pulse',sending_data,{headers:{authorization:`Bearer ${token}`}}).then(res=>{
-        AsyncStorage.setItem(`pulse_data ${id}`,'')
-    }).catch(err=>{
-        AsyncStorage.setItem(`pulse_data ${id}`,JSON.stringify(sending_data))
-    })
 }
 
 

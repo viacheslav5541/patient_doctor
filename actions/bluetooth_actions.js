@@ -25,10 +25,8 @@ export function update_status(status){
 
 export function reconnect(){
     return function(dispatch,getState){
-        console.log('djhjksdhjksdhdjks')
         let ble_data = getState().Bluetooth_data;
         if(ble_data.connected_device||ble_data.device_searching) {
-            console.log('ok')
             ble_data.manager.cancelDeviceConnection(ble_data.device);
         }
         else{
@@ -72,10 +70,9 @@ export function full_disconnect(){
         getState().Bluetooth_data.manager.cancelDeviceConnection(getState().Bluetooth_data.device).then(res=>{
             dispatch({type:DEVICE_SEARCHING,payload:false});
             dispatch({type:DEVICE_CONNECTED_CHANGE,payload:false});
-            dispatch(update_status('Устройство отключилось'))
+            dispatch(update_status('Проверка подключения...'))
 
         })
-
     }
 
 }
@@ -134,9 +131,10 @@ export function set_pulse_listener(){
                         dispatch({
                             type: GET_STEPS,
                             payload: result
-                        })
+                        });
                         send_steps(result,getState().server_data.access_token,getState().server_data.user_id)
                     }, 5000);
+                    console.log('dfkjdfkjdf',result)
                     let heartRate = -1;
                     let decoded = Buffer.from(characteristic.value, 'base64');
                     let firstBitValue = decoded.readInt8(0) & 0x01;
@@ -163,18 +161,17 @@ export function set_pulse_listener(){
 
 
 var result;
-function steps_getter(manager,mydevice){
+export function steps_getter(manager,mydevice){
     manager.discoverAllServicesAndCharacteristicsForDevice(mydevice)
         .then((device) => {
             return device.readCharacteristicForService(consts.STEPS_SERVICE,consts.STEP_CHARACTERISTIC)
         })
         .then((promice)=>{
-            console.log(promice)
             let heartRate = -1;
-            // console.log(promice.value)
+            console.log(promice.value)
             let decoded = Buffer.from(promice.value, 'base64');
-            // console.log(decoded)
-            result = (decoded.readInt8(2) & 0xff) << 8
+            let firstBit = decoded.readInt8(1)
+            result = ((decoded.readInt8(2) & 0xff) << 8) + firstBit;
         })
 }
 

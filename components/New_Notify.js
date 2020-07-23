@@ -101,7 +101,7 @@ class New_Notify extends Component {
         await axios.post('http://82.179.9.51:8080/patient/info-recommendation',body,{headers:{authorization:`Bearer ${this.props.server_data.access_token}`}}).then(res=>{
             return res.data
         }).then(res=>{
-            this.setState({notyfy:res[0].rec},()=>{this.setState({loading:false})});
+            this.setState({notyfy:res[0].rec.reverse()},()=>{this.setState({loading:false})});
         }).catch(err=>{
             this.setState({loading:false,notyfy:[]})
         });
@@ -132,7 +132,7 @@ class New_Notify extends Component {
                                 <TextInput
                                     style = {{flex:1,fontSize:vw(5)}}
                                     secureTextEntry={false}
-                                    placeholder = 'Оставьте свой коментарий'
+                                    placeholder = 'Оставьте свой комментарий'
                                     onChangeText={text => {this.setState({comment:text});console.log(this.state.comment)}}
                                 />
                             </View>
@@ -153,7 +153,7 @@ class New_Notify extends Component {
                         return(<View style = {{flex:1,backgroundColor:'white',marginBottom:10,marginLeft:10,width:vw(48),borderRadius:15,flexDirection:"column",marginTop:10}}>
                                 <View style = {{flex:1,backgroundColor:'#EEF4FF',borderTopRightRadius:20,borderTopLeftRadius:20,flexDirection:'row'}}>
                                     <Text style = {{marginTop:'auto',marginLeft:10,fontSize: vw(5.5),color:"grey",fontWeight: 'bold'}}>{item.time}</Text>
-                                    {item.need_reminder==0&&(moment().format('HH') - hh == 0)&&(moment().format('YYYY-DD-MM')==moment(this.props.date).format('YYYY-DD-MM'))?<TouchableOpacity onPress  = {()=>{this.setState({confirm_menu:true,notify_id:item.id,comment:''},()=>console.log(this.state))}} style = {{marginLeft:"auto",marginRight:10,alignSelf: 'flex-end',marginBottom:'auto',marginTop:'auto'}}>
+                                    {item.need_reminder==1&&(moment().format('HH') - hh == 0)&&(moment().format('YYYY-DD-MM')==moment(this.props.date).format('YYYY-DD-MM'))?<TouchableOpacity onPress  = {()=>{this.setState({confirm_menu:true,notify_id:item.id,comment:''},()=>console.log(this.state))}} style = {{marginLeft:"auto",marginRight:10,alignSelf: 'flex-end',marginBottom:'auto',marginTop:'auto'}}>
                                         <Icon size = {vw(4)} name = 'form'/>
                                     </TouchableOpacity>:null}
                                 </View>

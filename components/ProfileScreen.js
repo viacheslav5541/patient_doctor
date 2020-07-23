@@ -6,8 +6,10 @@ import {logout} from "../actions/server_actions";
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/AntDesign'
+import Heartbeat from '../Heartbeat';
 
 import {
+    AsyncStorage,
   View,
   Dimensions,
   Image,
@@ -18,7 +20,7 @@ import {connect} from 'react-redux';
 import { StackActions, NavigationActions } from 'react-navigation';
 import Connection_status from "./connection_status";
 import New_Notify from "./New_Notify";
-
+import { AppRegistry } from 'react-native';
 const resetAction = StackActions.reset({
   index: 0,
   actions: [
@@ -58,6 +60,7 @@ class ProfileScreen extends Component {
 
 
    componentDidMount(){
+      // Heartbeat.startService();
       this.props.navigation.addListener('willFocus', ()=>{
       console.log('focus')
           if(!this.props.Bluetooth_data.connected_device){
@@ -69,7 +72,6 @@ class ProfileScreen extends Component {
 
   
   render() {
-
 
       return (
         <View style = {{flexDirection:'column',flex:1,backgroundColor:'#2979FF'}}>
