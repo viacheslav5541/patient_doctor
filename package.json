@@ -9,7 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "buffer": "^5.4.3",
     "carthage": "^1.0.6",
     "clean-webpack-plugin": "^3.0.0",
